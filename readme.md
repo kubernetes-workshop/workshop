@@ -35,5 +35,6 @@ This workshop also includes a hands-on exercise with the participants, featuring
 For more details on the Hands-On exercise Workbook go here: [more details](./docs/hands-on)
 
 
+![](./docs/images/exercise.png)
 ![](./docs/images/world-map.png)
 
