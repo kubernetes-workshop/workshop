@@ -32,7 +32,7 @@ This workshop also includes a hands-on exercise with the participants, featuring
 * ingress with external dns
 * Horizontal Pod Autoscaling
 
-For more details on the Hands-On exercise Workbook can be [more details](./docs/hands-on)
+For more details on the Hands-On exercise Workbook go here: [more details](./docs/hands-on)
 
 
 ![](./docs/images/world-map.png)
