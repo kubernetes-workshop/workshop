@@ -1,0 +1,19 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: mongodb
+  namespace: captureorder
+  annotations:
+    flux.weave.works/automated: "false"
+    flux.weave.works/tag.chart-image: semver:~4.0
+spec:
+  releaseName: orders-mongo
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: mongodb
+    version: 4.9.0
+  values:
+    mongodbUsername: orders-user
+    mongodbPassword: orders-password
+    mongodbDatabase: akschallenge

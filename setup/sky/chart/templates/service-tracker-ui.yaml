@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-tracker-ui
+  labels:
+    name: service-tracker-ui
+  namespace: {{ .Values.namespace }}
+spec:
+  type: "LoadBalancer"
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: service-tracker-ui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "service-tracker-ui"
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: service-tracker-ui
+  template:
+    metadata:
+      labels:
+        app: service-tracker-ui
+    spec:
+      containers:
+        - image: {{ .Values.serviceTrackerUi.registryServer }}/{{ .Values.serviceTrackerUi.imageName }}:{{ .Values.serviceTrackerUi.imageTag }}
+          imagePullPolicy: Always
+          name: service-tracker-ui
+          # resources:
+          #   requests:
+          #     memory: "64Mi"
+          #     cpu: "100m"
+          #   limits:
+          #     memory: "256Mi"
+          #     cpu: "500m"
+          env:
+            - name: FLIGHT_API_ROOT
+              value: http://flights-api.{{ .Values.namespace }}.svc.cluster.local/
+            - name: WEATHER_API_ROOT
+              value: http://weather-api.{{ .Values.namespace }}.svc.cluster.local/
+            - name: QUAKES_API_ROOT
+              value: http://quakes-api.{{ .Values.namespace }}.svc.cluster.local/
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: appinsights-secret
+                  key: appinsights
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+      restartPolicy: Always        

@@ -1,0 +1,4 @@
+# Default values for chart
+
+namespace: captureorder
+replicas: 1

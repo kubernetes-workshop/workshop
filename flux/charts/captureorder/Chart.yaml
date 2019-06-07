@@ -1,0 +1,11 @@
+apiVersion: v1
+appVersion: "0.0.3"
+description: Kubernetes Workshop Application
+name: captureorder
+version: 0.0.3
+home: TODO
+sources:
+- TODO
+maintainers: 
+  - name: TODO
+    email: TODO

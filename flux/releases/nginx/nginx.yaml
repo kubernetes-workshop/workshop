@@ -1,0 +1,21 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: nginx
+  namespace: nginx
+  annotations:
+    # With the flux.weave.works annotations I instruct Flux to automate this release. 
+    # When a new tag with the prefix dev is pushed to Docker Hub, Flux will update the 
+    # image field in the yaml file, will commit and push the change to Git and finally 
+    # will apply the change on the cluster.
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~0.4
+spec:
+  releaseName: nginx
+  chart:
+    git: git@ssh.dev.azure.com:v3/FlorianBoehmak/azure-kubernetes/eagle
+    path: flux/charts/nginx
+    ref: master
+  values:
+    replicas: 1

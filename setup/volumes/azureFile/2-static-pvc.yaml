@@ -1,0 +1,85 @@
+---
+#
+# prerequisites
+#
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: system:azure-cloud-provider
+rules:
+- apiGroups: ['']
+  resources: ['secrets']
+  verbs:     ['get','create']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:azure-cloud-provider
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: system:azure-cloud-provider
+subjects:
+- kind: ServiceAccount
+  name: persistent-volume-binder
+  namespace: kube-system
+---
+#
+# start here
+#
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: static-azure-file-volume
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  azureFile:
+    secretName: handelsblatt-storage-secret # your kubernetes storage secret name
+    shareName: static-azure-file-volume
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: static-azure-file-volume
+  namespace: snippets
+  annotations:
+    volume.beta.kubernetes.io/storage-class: ""
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeName: static-azure-file-volume
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: static-pvc-azure-file-volume
+  namespace: snippets
+spec:
+  containers:
+  - name: static-pvc-azure-file-volume
+    image: nginx
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+    volumeMounts:
+    - mountPath: "/mnt/azure"
+      name: volume1
+  volumes:
+    - name: volume1
+      persistentVolumeClaim:
+        claimName: static-azure-file-volume
+

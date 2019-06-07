@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: captureorder
+spec:
+  selector:
+      matchLabels:
+        app: backend
+  replicas: 2
+  template:
+      metadata:
+        labels:
+            app: backend
+      spec:
+        containers:
+        - name: backend
+          image:  fnbk/captureorder-backend:v0.0.1
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /healthz
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /healthz
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          env:
+          - name: TEAMNAME
+            value: "team-azch"
+          - name: MONGOHOST
+            value: "orders-mongo-mongodb.captureorder.svc.cluster.local"
+          - name: MONGOUSER
+            value: "orders-user"
+          - name: MONGOPASSWORD
+            value: "orders-password"
+          ports:
+          - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: captureorder
+spec:
+  selector:
+    app: backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend
+  namespace: captureorder  
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50

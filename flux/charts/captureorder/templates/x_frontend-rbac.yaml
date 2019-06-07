@@ -1,0 +1,38 @@
+# Frontend gets a separate service account to access the kubernetes cluster API (sidecar)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend
+  namespace: captureorder
+---
+# This cluster role defines read access to services
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: service-reader
+  namespace: captureorder
+rules:
+- apiGroups:
+  - "" # core API
+  resources:
+  - services
+  verbs:
+  - get
+  - read
+---
+# assigns the 'service-reader' role to the 'default:default' service account.
+# RoleBindings cannot auto-sync, they need to be deleted first and then created again
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: captureorder:service-reader
+  namespace: captureorder
+subjects:
+- kind: ServiceAccount
+  name: frontend
+  namespace: captureorder
+roleRef:
+  kind: Role
+  name: service-reader
+  apiGroup: rbac.authorization.k8s.io
+---

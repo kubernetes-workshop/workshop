@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orange
+  namespace: tree
+spec:
+  selector:
+    matchLabels:
+      app: orange
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: orange
+    spec:
+      containers:
+      - name: orange
+        image: strm/helloworld-http
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orange
+  namespace: tree
+spec:
+  selector:
+    app: orange
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---

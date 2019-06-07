@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: banana
+  namespace: tree
+spec:
+  selector:
+    matchLabels:
+      app: banana
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: banana
+    spec:
+      containers:
+      - name: banana
+        image: nginx:1.15.0-alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: banana
+  namespace: tree
+spec:
+  selector:
+    app: banana
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---

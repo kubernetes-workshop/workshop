@@ -1,0 +1,33 @@
+# Default values for chart
+
+namespace: sky
+
+dataApi:
+  registryServer: docker.io
+  imageName: ak8s/data-api
+  imageTag: latest
+  replicas: 2
+
+flightsApi:
+  registryServer: docker.io
+  imageName: ak8s/flights-api
+  imageTag: latest
+  replicas: 1
+
+quakesApi:
+  registryServer: docker.io
+  imageName: ak8s/quakes-api
+  imageTag: latest
+  replicas: 1
+
+serviceTrackerUi:
+  registryServer: docker.io
+  imageName: ak8s/service-tracker-ui
+  imageTag: latest
+  replicas: 1
+
+weatherApi:
+  registryServer: docker.io
+  imageName: ak8s/weather-api
+  imageTag: latest
+  replicas: 1
