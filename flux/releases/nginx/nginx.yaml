@@ -14,7 +14,7 @@ metadata:
 spec:
   releaseName: nginx
   chart:
-    git: git@ssh.dev.azure.com:v3/FlorianBoehmak/azure-kubernetes/eagle
+    git: git@ssh.dev.azure.com:v3/FlorianBoehmak/azure-kubernetes/workshop
     path: flux/charts/nginx
     ref: master
   values:
