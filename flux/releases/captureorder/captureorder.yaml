@@ -14,7 +14,7 @@ metadata:
 spec:
   releaseName: captureorder
   chart:
-    git: git@ssh.dev.azure.com:v3/FlorianBoehmak/azure-kubernetes/workshop
+    git: git@ssh.dev.azure.com:v3/FlorianBoehmak/kubernetes-workshop/workshop
     path: flux/charts/captureorder
     ref: master
   values:
