@@ -1,0 +1,41 @@
+#
+# good-gate
+#
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: good-gate
+  namespace: good-gate
+spec:
+  selector:
+    matchLabels:
+      app: good-gate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: good-gate
+    spec:
+      containers:
+      - name: good-gate
+        image: nginx:1.15.0-alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: good-gate
+  namespace: good-gate
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  selector:
+    app: good-gate
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
