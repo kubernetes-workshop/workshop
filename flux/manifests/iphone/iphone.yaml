@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iphone
+  namespace: iphone
+spec:
+  selector:
+    matchLabels:
+      app: iphone
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: iphone
+    spec:
+      containers:
+      - name: iphone
+        image: tutum/hello-world
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iphone
+  namespace: iphone
+spec:
+  selector:
+    app: iphone
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
