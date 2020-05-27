@@ -38,3 +38,6 @@ For more details on the Hands-On exercise Workbook go here: [more details](./doc
 ![](./docs/images/exercise.png)
 ![](./docs/images/world-map.png)
 
+
+[![What is Kubernetes](https://yt-embed.herokuapp.com/embed?v=VnvRFRk_51k)](https://www.youtube.com/watch?v=VnvRFRk_51k "What is Kubernetes?")
+
